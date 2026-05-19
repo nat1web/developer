@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nathan — Software Developer & Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#ffffff; --bg2:#f7f7f5; --text:#0f0f0f; --text2:#4b4b4b;
+      --text3:#9b9b9b; --accent:#0066ff; --accent2:#e8f0ff;
+      --border:#e8e8e8; --shadow:0 2px 20px rgba(0,0,0,.07); --radius:16px; --max:1100px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:99px; }
+
+    /* ── Nav ─────────────────────────────────────────── */
+    nav { position:fixed; inset:0 0 auto; z-index:100; background:rgba(255,255,255,.88); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid var(--border); }
+    .nav-inner { max-width:var(--max); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:60px; gap:16px; }
+    .nav-logo { font-weight:800; font-size:17px; letter-spacing:-.5px; color:var(--text); text-decoration:none; flex-shrink:0; }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { font-size:14px; font-weight:500; color:var(--text2); text-decoration:none; transition:color .2s; }
+    .nav-links a:hover { color:var(--accent); }
+    .nav-right { display:flex; align-items:center; gap:10px; }
+
+    /* Language toggle */
+    .lang-toggle { display:flex; align-items:center; background:var(--bg2); border:1px solid var(--border); border-radius:99px; padding:3px; gap:2px; }
+    .lang-btn { font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; border:none; background:transparent; color:var(--text3); cursor:pointer; transition:all .2s; white-space:nowrap; }
+    .lang-btn.active { background:#fff; color:var(--accent); box-shadow:0 1px 4px rgba(0,0,0,.1); }
+
+    .nav-cta { background:var(--text); color:#fff; font-size:13px; font-weight:600; padding:8px 18px; border-radius:99px; text-decoration:none; transition:opacity .2s; flex-shrink:0; }
+    .nav-cta:hover { opacity:.7; }
+
+    /* ── Helpers ─────────────────────────────────────── */
+    .container { max-width:var(--max); margin:0 auto; padding:0 32px; }
+    section { padding:100px 0; }
+    section:nth-child(even) { background:var(--bg2); }
+    .section-label { font-size:11px; font-weight:700; letter-spacing:2px; color:var(--accent); text-transform:uppercase; margin-bottom:12px; }
+    .section-title { font-size:clamp(28px,5vw,44px); font-weight:800; letter-spacing:-1.2px; line-height:1.12; margin-bottom:14px; }
+    .section-sub { font-size:17px; color:var(--text2); max-width:520px; line-height:1.75; }
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .6s,transform .6s; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    /* ── Hero ────────────────────────────────────────── */
+    #hero { padding:160px 0 96px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:8px; background:var(--accent2); color:var(--accent); font-size:13px; font-weight:600; padding:6px 14px; border-radius:99px; margin-bottom:28px; }
+    .hero-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.85)} }
+    .hero-name { font-size:clamp(46px,9vw,82px); font-weight:900; letter-spacing:-3px; line-height:1.04; margin-bottom:20px; }
+    .hero-name em { font-style:normal; color:var(--accent); }
+    .hero-tagline { font-size:clamp(16px,2.5vw,20px); color:var(--text2); max-width:560px; line-height:1.7; margin-bottom:40px; }
+    .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; padding:14px 28px; border-radius:99px; text-decoration:none; transition:all .2s; }
+    .btn-primary { background:var(--text); color:#fff; }
+    .btn-primary:hover { background:var(--accent); transform:translateY(-1px); }
+    .btn-secondary { background:transparent; color:var(--text); border:1.5px solid var(--border); }
+    .btn-secondary:hover { border-color:var(--text); transform:translateY(-1px); }
+    .hero-stats { display:flex; gap:40px; flex-wrap:wrap; margin-top:64px; padding-top:40px; border-top:1px solid var(--border); }
+    .stat-num { font-size:32px; font-weight:800; letter-spacing:-1.5px; line-height:1; }
+    .stat-label { font-size:13px; color:var(--text3); margin-top:4px; }
+
+    /* ── About ───────────────────────────────────────── */
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; margin-top:48px; }
+    @media(max-width:700px){.about-grid{grid-template-columns:1fr;gap:32px}}
+    .about-body { font-size:16px; color:var(--text2); line-height:1.8; }
+    .about-body p+p { margin-top:16px; }
+    .about-body strong { color:var(--text); font-weight:600; }
+    .about-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+    .chip { font-size:12px; font-weight:600; padding:5px 12px; border-radius:99px; background:var(--bg2); color:var(--text2); border:1px solid var(--border); }
+    .about-card { background:var(--text); color:#fff; border-radius:var(--radius); padding:32px; }
+    .fact-row { display:flex; flex-direction:column; gap:18px; }
+    .fact-label { font-size:10px; font-weight:700; letter-spacing:1.5px; color:rgba(255,255,255,.4); text-transform:uppercase; margin-bottom:2px; }
+    .fact-value { font-size:14px; font-weight:500; color:rgba(255,255,255,.9); }
+
+    /* ── Projects ────────────────────────────────────── */
+    .projects-header { margin-bottom:52px; }
+    .alfred-card { background:#0a0a0f; border-radius:24px; overflow:hidden; margin-bottom:24px; border:1px solid rgba(255,255,255,.06); }
+    .alfred-top { display:grid; grid-template-columns:1fr 1.1fr; min-height:520px; }
+    @media(max-width:780px){.alfred-top{grid-template-columns:1fr}}
+    .alfred-content { padding:52px 48px; display:flex; flex-direction:column; justify-content:center; }
+    .project-badge { font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .project-badge span { width:6px; height:6px; background:#0066ff; border-radius:50%; display:inline-block; }
+    .alfred-title { font-size:42px; font-weight:900; letter-spacing:-2px; color:#fff; line-height:1.05; margin-bottom:6px; }
+    .alfred-sub { font-size:15px; color:rgba(255,255,255,.45); margin-bottom:20px; }
+    .alfred-desc { font-size:14px; color:rgba(255,255,255,.68); line-height:1.78; margin-bottom:28px; }
+    .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:28px; }
+    .fi { display:flex; align-items:flex-start; gap:8px; }
+    .fi-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+    .fi-text { font-size:12px; color:rgba(255,255,255,.55); line-height:1.45; }
+    .tech-stack { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:28px; }
+    .tech-tag { font-size:11px; font-weight:600; padding:4px 10px; border-radius:99px; background:rgba(255,255,255,.06); color:rgba(255,255,255,.55); border:1px solid rgba(255,255,255,.1); }
+    .alfred-btns { display:flex; gap:10px; flex-wrap:wrap; }
+    .alfred-btn { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; padding:10px 20px; border-radius:99px; text-decoration:none; transition:all .2s; }
+    .alfred-btn-primary { background:#0066ff; color:#fff; }
+    .alfred-btn-primary:hover { background:#0052cc; transform:translateY(-1px); }
+    .alfred-btn-secondary { background:rgba(255,255,255,.07); color:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.12); }
+    .alfred-btn-secondary:hover { background:rgba(255,255,255,.12); }
+
+    /* ── Phone mockups ───────────────────────────────── */
+    .screens-wrap { background:linear-gradient(160deg,#111118 0%,#0a0a1a 60%,#0f1a30 100%); display:flex; align-items:center; justify-content:center; padding:40px 24px; gap:16px; position:relative; overflow:hidden; }
+    .screens-wrap::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 60% 50%,rgba(0,102,255,.12) 0%,transparent 70%); }
+    .phone-wrap { position:relative; flex-shrink:0; }
+    .phone-wrap.main { transform:scale(1); z-index:2; }
+    .phone-wrap.side { transform:scale(.82); opacity:.6; }
+    .phone-shell { width:186px; border-radius:38px; background:#1c1c1e; border:3px solid rgba(255,255,255,.13); box-shadow:0 32px 64px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.04); overflow:hidden; display:flex; flex-direction:column; }
+    .phone-shell.tall { height:370px; }
+    .phone-notch-bar { height:10px; background:#1c1c1e; display:flex; justify-content:center; padding-top:4px; flex-shrink:0; }
+    .phone-notch { width:56px; height:5px; background:#2c2c2e; border-radius:99px; }
+    .phone-body { flex:1; overflow:hidden; background:#0a0a0f; display:flex; flex-direction:column; }
+
+    /* Screen: Tasks */
+    .scr-tasks { padding:10px 10px 0; }
+    .scr-greeting { font-size:7.5px; font-weight:800; color:#fff; letter-spacing:-.3px; margin-bottom:1px; }
+    .scr-date { font-size:6.5px; color:rgba(255,255,255,.35); margin-bottom:8px; }
+    .scr-section-label { font-size:6px; font-weight:700; color:rgba(255,255,255,.3); letter-spacing:.8px; text-transform:uppercase; margin-bottom:5px; }
+    .task-card-scr { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:8px; padding:7px 8px; margin-bottom:4px; display:flex; align-items:center; gap:7px; }
+    .task-check { width:12px; height:12px; border-radius:50%; border:1.5px solid rgba(255,255,255,.25); flex-shrink:0; }
+    .task-check.done { background:#0066ff; border-color:#0066ff; position:relative; }
+    .task-check.done::after { content:'✓'; font-size:7px; color:#fff; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .task-title-scr { font-size:7.5px; color:rgba(255,255,255,.8); flex:1; }
+    .task-time-scr { font-size:6.5px; color:rgba(255,255,255,.3); }
+    .task-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+    .scr-tabbar { height:38px; background:rgba(28,28,30,.95); border-top:1px solid rgba(255,255,255,.06); display:flex; align-items:center; justify-content:space-around; padding:0 12px; flex-shrink:0; }
+    .tab-item { display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .tab-icon { font-size:13px; }
+    .tab-label { font-size:5.5px; color:rgba(255,255,255,.3); }
+
+    /* Screen: Chat */
+    .scr-chat { padding:8px 8px 0; display:flex; flex-direction:column; gap:5px; }
+    .chat-header-scr { font-size:8px; font-weight:800; color:#fff; margin-bottom:4px; display:flex; align-items:center; gap:5px; }
+    .chat-alfred-dot { width:16px; height:16px; background:linear-gradient(135deg,#0066ff,#0044cc); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; }
+    .bubble { border-radius:10px; padding:6px 8px; font-size:7px; line-height:1.45; max-width:80%; }
+    .bubble-alfred { background:rgba(255,255,255,.07); color:rgba(255,255,255,.8); border-radius:10px 10px 10px 2px; align-self:flex-start; }
+    .bubble-user { background:#0066ff; color:#fff; border-radius:10px 10px 2px 10px; align-self:flex-end; }
+    .chat-options { display:flex; flex-wrap:wrap; gap:4px; margin-top:2px; }
+    .opt-chip { font-size:6.5px; font-weight:600; padding:3px 7px; border-radius:99px; background:rgba(0,102,255,.2); color:#6db3ff; border:1px solid rgba(0,102,255,.3); }
+
+    /* Screen: Calendar */
+    .scr-cal { padding:8px 8px 0; }
+    .cal-month { font-size:8px; font-weight:800; color:#fff; margin-bottom:6px; }
+    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; margin-bottom:6px; }
+    .cal-head { font-size:5.5px; color:rgba(255,255,255,.3); text-align:center; font-weight:600; }
+    .cal-day { font-size:6.5px; color:rgba(255,255,255,.6); text-align:center; padding:2px 0; border-radius:4px; }
+    .cal-day.today { background:#0066ff; color:#fff; font-weight:700; }
+    .cal-day.has-dot { position:relative; }
+    .cal-day.has-dot::after { content:''; width:3px; height:3px; background:rgba(255,255,255,.5); border-radius:50%; position:absolute; bottom:0; left:50%; transform:translateX(-50%); }
+    .cal-day.other { color:rgba(255,255,255,.2); }
+    .cal-divider { height:1px; background:rgba(255,255,255,.07); margin-bottom:6px; }
+    .cal-event { background:rgba(255,255,255,.04); border-left:2px solid #0066ff; border-radius:0 6px 6px 0; padding:4px 6px; margin-bottom:3px; }
+    .cal-event-title { font-size:6.5px; color:rgba(255,255,255,.8); font-weight:600; }
+    .cal-event-time { font-size:5.5px; color:rgba(255,255,255,.35); }
+    .cal-unplanned-label { font-size:5.5px; font-weight:700; color:rgba(255,255,255,.25); letter-spacing:.8px; text-transform:uppercase; margin:5px 0 3px; }
+    .cal-task-row { display:flex; align-items:center; gap:5px; padding:3px 0; }
+    .cal-task-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,200,0,.6); flex-shrink:0; }
+    .cal-task-txt { font-size:6px; color:rgba(255,255,255,.5); }
+
+    /* ── Project grid ────────────────────────────────── */
+    .projects-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+    @media(max-width:840px){.projects-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:560px){.projects-grid{grid-template-columns:1fr}}
+    .project-card { border:1.5px solid var(--border); border-radius:var(--radius); padding:28px; background:var(--bg); transition:all .25s; display:flex; flex-direction:column; text-decoration:none; color:inherit; }
+    .project-card:hover { border-color:var(--text); transform:translateY(-3px); box-shadow:var(--shadow); }
+    .card-emoji { font-size:30px; margin-bottom:14px; }
+    .card-title { font-size:18px; font-weight:700; letter-spacing:-.4px; margin-bottom:8px; }
+    .card-desc { font-size:13px; color:var(--text2); line-height:1.65; flex:1; margin-bottom:18px; }
+    .card-tags { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:14px; }
+    .card-tag { font-size:11px; font-weight:600; padding:3px 9px; border-radius:99px; background:var(--bg2); color:var(--text3); }
+    .card-link { font-size:13px; font-weight:600; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:4px; }
+    .card-link:hover { gap:8px; }
+
+    /* ── Skills ──────────────────────────────────────── */
+    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:48px; }
+    @media(max-width:720px){.skills-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:460px){.skills-grid{grid-template-columns:1fr}}
+    .skill-card { background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius); padding:26px; transition:border-color .2s,box-shadow .2s; }
+    .skill-card:hover { border-color:var(--accent); box-shadow:0 0 0 4px var(--accent2); }
+    .skill-icon { font-size:26px; margin-bottom:12px; }
+    .skill-name { font-size:15px; font-weight:700; margin-bottom:8px; }
+    .skill-list { list-style:none; }
+    .skill-list li { font-size:13px; color:var(--text2); padding:4px 0; border-bottom:1px solid var(--border); }
+    .skill-list li:last-child { border-bottom:none; }
+
+    /* ── Timeline ────────────────────────────────────── */
+    .timeline { margin-top:48px; position:relative; }
+    .timeline::before { content:''; position:absolute; left:20px; top:0; bottom:0; width:2px; background:var(--border); }
+    .tl-item { display:flex; gap:30px; margin-bottom:36px; position:relative; }
+    .tl-dot { width:42px; height:42px; border-radius:50%; background:var(--bg2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; z-index:1; }
+    .tl-content { padding-top:8px; }
+    .tl-date { font-size:11px; font-weight:700; letter-spacing:1.5px; color:var(--accent); text-transform:uppercase; margin-bottom:5px; }
+    .tl-title { font-size:17px; font-weight:700; margin-bottom:6px; }
+    .tl-desc { font-size:14px; color:var(--text2); line-height:1.7; }
+
+    /* ── Contact ─────────────────────────────────────── */
+    #contact { text-align:center; }
+    #contact .section-sub { margin:0 auto 40px; }
+    .contact-links { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+    .contact-link { display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; padding:13px 26px; border-radius:99px; border:1.5px solid var(--border); color:var(--text); text-decoration:none; transition:all .2s; background:var(--bg); }
+    .contact-link:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+    .contact-link svg { width:17px; height:17px; }
+
+    footer { border-top:1px solid var(--border); padding:32px; text-align:center; font-size:13px; color:var(--text3); }
+
+    @media(max-width:600px) {
+      .nav-links { display:none; }
+      .nav-inner,.container { padding:0 20px; }
+      .alfred-content { padding:32px 24px; }
+      .feature-grid { grid-template-columns:1fr; }
+      section { padding:72px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Nathan.</a>
+    <ul class="nav-links">
+      <li><a href="#about"    data-i18n="nav_about">About</a></li>
+      <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="#skills"   data-i18n="nav_skills">Skills</a></li>
+      <li><a href="#process"  data-i18n="nav_process">Process</a></li>
+      <li><a href="#contact"  data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn"        onclick="setLang('zh')">中文</button>
+      </div>
+      <a href="mailto:nathanielcoop3.14159@gmail.com" class="nav-cta" data-i18n="nav_cta">Get in touch</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="container">
+    <div class="reveal">
+      <div class="hero-badge"><span class="hero-dot"></span><span data-i18n="hero_badge">Open to projects &amp; collabs</span></div>
+      <h1 class="hero-name" data-i18n-html="hero_name">Hi, I'm <em>Nathan</em>.<br>I build apps<br>that think.</h1>
+      <p class="hero-tagline" data-i18n="hero_tagline">iOS developer, AI integrator, and web builder. I design and ship intelligent, full-stack products — from core architecture to polished UI to production AI systems.</p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn btn-primary" data-i18n="hero_btn1">View my work</a>
+        <a href="https://nat1web.github.io" target="_blank" class="btn btn-secondary" data-i18n="hero_btn2">Video Portfolio ↗</a>
+      </div>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-label" data-i18n="stat1">App on the App Store</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label" data-i18n="stat2">Websites shipped</div></div>
+      <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label" data-i18n="stat3">AI tools integrated</div></div>
+      <div class="stat-item"><div class="stat-num">10K+</div><div class="stat-label" data-i18n="stat4">Lines of Swift</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── About ─────────────────────────────────────────────── -->
+<section id="about">
+  <div class="container">
+    <p class="section-label reveal" data-i18n="about_label">About</p>
+    <h2 class="section-title reveal" data-i18n="about_title">Developer. Designer.<br>AI builder.</h2>
+    <div class="about-grid">
+      <div class="about-body reveal">
+        <p data-i18n-html="about_p1">I'm Nathan — a self-taught developer who builds software that actually improves people's lives. My flagship project <strong>Alfred</strong> is a full-stack iOS app I designed, architected, and shipped entirely solo.</p>
+        <p data-i18n-html="about_p2">I work across the whole product lifecycle: data modelling, cloud sync, real-time AI integration, interactive UI systems, and App Store monetisation. I've also built client websites, including a <strong>fitness coaching portfolio</strong> for a Taipei-based personal trainer.</p>
+        <p data-i18n-html="about_p3">Outside code, I do <strong>professional video editing</strong> with a focus on motion graphics — that visual sensibility directly shapes how I design interfaces.</p>
+        <div class="about-chips">
+          <span class="chip">Swift</span><span class="chip">SwiftUI</span><span class="chip">AI Integration</span>
+          <span class="chip">iOS Development</span><span class="chip">HTML / CSS / JS</span>
+          <span class="chip">UI/UX Design</span><span class="chip">Motion Graphics</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="about-card">
+          <div class="fact-row">
+            <div class="fact"><div class="fact-label" data-i18n="fact1_label">Primary Stack</div><div class="fact-value">Swift · SwiftUI · Xcode</div></div>
+            <div class="fact"><div class="fact-label" data-i18n="fact2_label">AI / Backend</div><div class="fact-value">Anthropic Claude API · Supabase</div></div>
+            <div class="fact"><div class="fact-label" data-i18n="fact3_label">Speciality</div><div class="fact-value" data-i18n="fact3_val">AI-powered app development</div></div>
+            <div class="fact"><div class="fact-label" data-i18n="fact4_label">Web</div><div class="fact-value">HTML · CSS · JavaScript</div></div>
+            <div class="fact"><div class="fact-label" data-i18n="fact5_label">Creative Tools</div><div class="fact-value">Premiere Pro · After Effects</div></div>
+            <div class="fact"><div class="fact-label" data-i18n="fact6_label">Currently building</div><div class="fact-value" data-i18n="fact6_val">Alfred Life OS (iOS)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Projects ───────────────────────────────────────────── -->
+<section id="projects">
+  <div class="container">
+    <div class="projects-header">
+      <p class="section-label reveal" data-i18n="proj_label">Projects</p>
+      <h2 class="section-title reveal" data-i18n="proj_title">Things I've built.</h2>
+      <p class="section-sub reveal" data-i18n="proj_sub">Real products, real complexity — designed and shipped from scratch.</p>
+    </div>
+
+    <!-- Alfred -->
+    <div class="alfred-card reveal">
+      <div class="alfred-top">
+        <div class="alfred-content">
+          <div class="project-badge"><span></span><span data-i18n="alfred_badge">Featured iOS App</span></div>
+          <h3 class="alfred-title">Alfred</h3>
+          <p class="alfred-sub" data-i18n="alfred_sub">AI-powered Life Operating System</p>
+          <p class="alfred-desc" data-i18n="alfred_desc">A full-stack iOS productivity app built entirely solo — from database schema and cloud sync to a custom AI assistant with 20+ real-time tools. Alfred acts as a personal planning AI: managing tasks, calendar events, finances, habits, study sessions, and more through natural conversation.</p>
+          <div class="feature-grid">
+            <div class="fi"><span class="fi-icon">🤖</span><span class="fi-text" data-i18n="f1">Claude AI with 20+ custom tools and streaming responses</span></div>
+            <div class="fi"><span class="fi-icon">📅</span><span class="fi-text" data-i18n="f2">Smart calendar with travel-time aware scheduling</span></div>
+            <div class="fi"><span class="fi-icon">⏱️</span><span class="fi-text" data-i18n="f3">Wall-clock Pomodoro timer — works when app is backgrounded</span></div>
+            <div class="fi"><span class="fi-icon">💳</span><span class="fi-text" data-i18n="f4">StoreKit 2 subscriptions — Free, Pro and Unlimited tiers</span></div>
+            <div class="fi"><span class="fi-icon">🗺️</span><span class="fi-text" data-i18n="f5">Auto-geocoding + MapKit travel time (car, transit, scooter)</span></div>
+            <div class="fi"><span class="fi-icon">🎮</span><span class="fi-text" data-i18n="f6">Full RPG system: XP, quests, achievements, shop</span></div>
+            <div class="fi"><span class="fi-icon">🧠</span><span class="fi-text" data-i18n="f7">Memory system — Alfred learns user preferences over time</span></div>
+            <div class="fi"><span class="fi-icon">💬</span><span class="fi-text" data-i18n="f8">Interactive AI UI: chips, sliders, questionnaire forms</span></div>
+          </div>
+          <div class="tech-stack">
+            <span class="tech-tag">Swift</span><span class="tech-tag">SwiftUI</span>
+            <span class="tech-tag">Claude API</span><span class="tech-tag">Supabase</span>
+            <span class="tech-tag">StoreKit 2</span><span class="tech-tag">MapKit</span>
+            <span class="tech-tag">CoreLocation</span><span class="tech-tag">WidgetKit</span>
+          </div>
+          <div class="alfred-btns">
+            <a href="https://apps.apple.com/tw/app/alfred/id6762342807?l=en-GB" target="_blank" class="alfred-btn alfred-btn-primary" data-i18n="alfred_appstore">⬇️ Download on App Store</a>
+            <a href="#process" class="alfred-btn alfred-btn-secondary" data-i18n="alfred_process">See how it was built →</a>
+          </div>
+        </div>
+
+        <!-- Phone mockups -->
+        <div class="screens-wrap">
+          <!-- Tasks -->
+          <div class="phone-wrap side">
+            <div class="phone-shell tall">
+              <div class="phone-notch-bar"><div class="phone-notch"></div></div>
+              <div class="phone-body">
+                <div class="scr-tasks">
+                  <div class="scr-greeting" data-i18n="phone_greeting">Good morning, Nathan ☀️</div>
+                  <div class="scr-date" data-i18n="phone_date">Wednesday · May 20</div>
+                  <div class="scr-section-label" data-i18n="phone_today">Today</div>
+                  <div class="task-card-scr"><div class="task-check done"></div><div style="flex:1"><div class="task-title-scr" data-i18n="task1">Morning workout</div></div><div class="task-dot" style="background:#4ade80"></div></div>
+                  <div class="task-card-scr"><div class="task-check"></div><div style="flex:1"><div class="task-title-scr" data-i18n="task2">Submit lab report</div></div><div class="task-time-scr">14:00</div></div>
+                  <div class="task-card-scr"><div class="task-check"></div><div style="flex:1"><div class="task-title-scr" data-i18n="task3">Dentist · City Clinic</div></div><div class="task-time-scr">16:30</div></div>
+                </div>
+              </div>
+              <div class="scr-tabbar">
+                <div class="tab-item"><div class="tab-icon">✅</div><div class="tab-label" style="color:#0066ff" data-i18n="tab_tasks">Tasks</div></div>
+                <div class="tab-item"><div class="tab-icon">📅</div><div class="tab-label" data-i18n="tab_cal">Calendar</div></div>
+                <div class="tab-item"><div class="tab-icon">💬</div><div class="tab-label">Alfred</div></div>
+                <div class="tab-item"><div class="tab-icon">📊</div><div class="tab-label" data-i18n="tab_fin">Finance</div></div>
+                <div class="tab-item"><div class="tab-icon">👤</div><div class="tab-label" data-i18n="tab_profile">Profile</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat (center) -->
+          <div class="phone-wrap main">
+            <div class="phone-shell tall">
+              <div class="phone-notch-bar"><div class="phone-notch"></div></div>
+              <div class="phone-body">
+                <div class="scr-chat" style="flex:1">
+                  <div class="chat-header-scr"><div class="chat-alfred-dot">A</div>Alfred</div>
+                  <div class="bubble bubble-alfred" data-i18n="chat1">Hey Nathan! You have Dentist at 4:30pm — it's 🚗 18 min away. Leave by 4:07pm to be on time.</div>
+                  <div class="chat-options">
+                    <div class="opt-chip" data-i18n="chip1">Set reminder</div>
+                    <div class="opt-chip" data-i18n="chip2">Get directions</div>
+                    <div class="opt-chip" data-i18n="chip3">Reschedule</div>
+                  </div>
+                  <div class="bubble bubble-user" style="margin-top:4px" data-i18n="chat2">Add a gym session tomorrow at 7am</div>
+                  <div class="bubble bubble-alfred" data-i18n-html="chat3">Done! 💪 Added <strong style="color:#fff">Gym</strong> on May 21 at 07:00 with a 30-min reminder. How long is the session?</div>
+                  <div class="chat-options">
+                    <div class="opt-chip">30 min</div>
+                    <div class="opt-chip">1 hr</div>
+                    <div class="opt-chip">1.5 hr</div>
+                  </div>
+                </div>
+              </div>
+              <div class="scr-tabbar">
+                <div class="tab-item"><div class="tab-icon">✅</div><div class="tab-label" data-i18n="tab_tasks">Tasks</div></div>
+                <div class="tab-item"><div class="tab-icon">📅</div><div class="tab-label" data-i18n="tab_cal">Calendar</div></div>
+                <div class="tab-item"><div class="tab-icon">💬</div><div class="tab-label" style="color:#0066ff">Alfred</div></div>
+                <div class="tab-item"><div class="tab-icon">📊</div><div class="tab-label" data-i18n="tab_fin">Finance</div></div>
+                <div class="tab-item"><div class="tab-icon">👤</div><div class="tab-label" data-i18n="tab_profile">Profile</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar -->
+          <div class="phone-wrap side">
+            <div class="phone-shell tall">
+              <div class="phone-notch-bar"><div class="phone-notch"></div></div>
+              <div class="phone-body">
+                <div class="scr-cal">
+                  <div class="cal-month" data-i18n="cal_month">May 2026</div>
+                  <div class="cal-grid">
+                    <div class="cal-head" data-i18n="d_mon">M</div><div class="cal-head" data-i18n="d_tue">T</div><div class="cal-head" data-i18n="d_wed">W</div>
+                    <div class="cal-head" data-i18n="d_thu">T</div><div class="cal-head" data-i18n="d_fri">F</div><div class="cal-head" data-i18n="d_sat">S</div><div class="cal-head" data-i18n="d_sun">S</div>
+                    <div class="cal-day other">28</div><div class="cal-day other">29</div><div class="cal-day other">30</div>
+                    <div class="cal-day has-dot">1</div><div class="cal-day has-dot">2</div><div class="cal-day">3</div><div class="cal-day">4</div>
+                    <div class="cal-day has-dot">5</div><div class="cal-day">6</div><div class="cal-day">7</div>
+                    <div class="cal-day">8</div><div class="cal-day has-dot">9</div><div class="cal-day">10</div><div class="cal-day">11</div>
+                    <div class="cal-day has-dot">12</div><div class="cal-day">13</div><div class="cal-day">14</div>
+                    <div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day has-dot">17</div><div class="cal-day">18</div>
+                    <div class="cal-day has-dot">19</div><div class="cal-day today">20</div><div class="cal-day has-dot">21</div>
+                    <div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div>
+                  </div>
+                  <div class="cal-divider"></div>
+                  <div class="cal-event"><div class="cal-event-title" data-i18n="ev1_title">Dentist · City Clinic</div><div class="cal-event-time" data-i18n="ev1_time">16:30 – 17:00 · 🚗 18 min away</div></div>
+                  <div class="cal-event" style="border-color:#4ade80"><div class="cal-event-title" data-i18n="ev2_title">Gym Session</div><div class="cal-event-time" data-i18n="ev2_time">07:00 – 08:00 tomorrow</div></div>
+                  <div class="cal-unplanned-label" data-i18n="unplanned">Unplanned</div>
+                  <div class="cal-task-row"><div class="cal-task-dot"></div><div class="cal-task-txt" data-i18n="utask1">Finish assignment draft</div></div>
+                  <div class="cal-task-row"><div class="cal-task-dot" style="background:rgba(100,160,255,.6)"></div><div class="cal-task-txt" data-i18n="utask2">Review lecture notes</div></div>
+                </div>
+              </div>
+              <div class="scr-tabbar">
+                <div class="tab-item"><div class="tab-icon">✅</div><div class="tab-label" data-i18n="tab_tasks">Tasks</div></div>
+                <div class="tab-item"><div class="tab-icon">📅</div><div class="tab-label" style="color:#0066ff" data-i18n="tab_cal">Calendar</div></div>
+                <div class="tab-item"><div class="tab-icon">💬</div><div class="tab-label">Alfred</div></div>
+                <div class="tab-item"><div class="tab-icon">📊</div><div class="tab-label" data-i18n="tab_fin">Finance</div></div>
+                <div class="tab-item"><div class="tab-icon">👤</div><div class="tab-label" data-i18n="tab_profile">Profile</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other cards -->
+    <div class="projects-grid">
+      <a href="https://nat1web.github.io/IanFitness/" target="_blank" class="project-card reveal">
+        <div class="card-emoji">💪</div>
+        <h3 class="card-title" data-i18n="ian_title">Ian Fitness</h3>
+        <p class="card-desc" data-i18n="ian_desc">Personal branding website for Ian, a Taipei-based private fitness coach. Features his transformation story (110kg → athlete), before/after client results gallery, Instagram video reels, brand partnership pages, and a bilingual contact section. Built to attract and convert new coaching clients.</p>
+        <div class="card-tags"><span class="card-tag">HTML</span><span class="card-tag">CSS</span><span class="card-tag">JavaScript</span><span class="card-tag" data-i18n="client_work">Client work</span></div>
+        <span class="card-link" data-i18n="visit_site">Visit site →</span>
+      </a>
+      <a href="https://nat1web.github.io" target="_blank" class="project-card reveal">
+        <div class="card-emoji">🎬</div>
+        <h3 class="card-title" data-i18n="video_title">Video Editing Portfolio</h3>
+        <p class="card-desc" data-i18n="video_desc">Professional video editing and motion graphics showcase — commercial cuts, cinematic sequences, and After Effects motion design work. A separate creative portfolio highlighting visual production and storytelling skills.</p>
+        <div class="card-tags"><span class="card-tag">Premiere Pro</span><span class="card-tag">After Effects</span></div>
+        <span class="card-link" data-i18n="visit_site">Visit site →</span>
+      </a>
+      <div class="project-card reveal" style="cursor:default">
+        <div class="card-emoji">🌐</div>
+        <h3 class="card-title" data-i18n="port_title">This Portfolio</h3>
+        <p class="card-desc" data-i18n="port_desc">Hand-coded from scratch — no frameworks, no templates. Pure HTML, CSS and vanilla JavaScript with custom phone mockups, scroll animations, a CSS timeline, and fully responsive layout. Deployable to GitHub Pages in minutes.</p>
+        <div class="card-tags"><span class="card-tag">HTML5</span><span class="card-tag">CSS3</span><span class="card-tag">JavaScript</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ─────────────────────────────────────────────── -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label reveal" data-i18n="skills_label">Skills</p>
+    <h2 class="section-title reveal" data-i18n="skills_title">What I work with.</h2>
+    <div class="skills-grid">
+      <div class="skill-card reveal"><div class="skill-icon">📱</div><h4 class="skill-name" data-i18n="sk1_name">iOS Development</h4><ul class="skill-list"><li>Swift &amp; SwiftUI</li><li>UIKit &amp; Combine</li><li>CoreData / UserDefaults</li><li>StoreKit 2 (subscriptions &amp; IAP)</li><li>UserNotifications &amp; background tasks</li><li>WidgetKit &amp; Live Activities</li></ul></div>
+      <div class="skill-card reveal"><div class="skill-icon">🤖</div><h4 class="skill-name" data-i18n="sk2_name">AI Integration</h4><ul class="skill-list"><li>Anthropic Claude API</li><li data-i18n="sk2_1">Tool use &amp; function calling</li><li data-i18n="sk2_2">System prompt engineering</li><li data-i18n="sk2_3">Streaming response handling</li><li data-i18n="sk2_4">Context &amp; memory systems</li><li data-i18n="sk2_5">Interactive AI UI patterns</li></ul></div>
+      <div class="skill-card reveal"><div class="skill-icon">☁️</div><h4 class="skill-name" data-i18n="sk3_name">Backend &amp; Data</h4><ul class="skill-list"><li>Supabase (PostgreSQL + Auth)</li><li data-i18n="sk3_1">REST API design &amp; consumption</li><li data-i18n="sk3_2">Offline-first architecture</li><li data-i18n="sk3_3">JSON serialisation (Swift Codable)</li><li data-i18n="sk3_4">Cross-device sync</li></ul></div>
+      <div class="skill-card reveal"><div class="skill-icon">🗺️</div><h4 class="skill-name" data-i18n="sk4_name">Location &amp; Maps</h4><ul class="skill-list"><li>MapKit &amp; MKLocalSearch</li><li data-i18n="sk4_1">CoreLocation &amp; geocoding</li><li data-i18n="sk4_2">MKDirections (travel time)</li><li data-i18n="sk4_3">Background location updates</li></ul></div>
+      <div class="skill-card reveal"><div class="skill-icon">🌐</div><h4 class="skill-name" data-i18n="sk5_name">Web &amp; Design</h4><ul class="skill-list"><li data-i18n="sk5_1">HTML5 &amp; CSS3 (no frameworks)</li><li data-i18n="sk5_2">JavaScript (vanilla)</li><li data-i18n="sk5_3">Responsive &amp; mobile-first design</li><li data-i18n="sk5_4">UI/UX &amp; product design</li><li data-i18n="sk5_5">GitHub Pages deployment</li></ul></div>
+      <div class="skill-card reveal"><div class="skill-icon">🎬</div><h4 class="skill-name" data-i18n="sk6_name">Creative Production</h4><ul class="skill-list"><li>Adobe Premiere Pro</li><li>Adobe After Effects</li><li data-i18n="sk6_1">Motion graphics</li><li data-i18n="sk6_2">Colour grading</li><li data-i18n="sk6_3">Commercial video editing</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Process ────────────────────────────────────────────── -->
+<section id="process">
+  <div class="container">
+    <p class="section-label reveal" data-i18n="proc_label">Development Log</p>
+    <h2 class="section-title reveal" data-i18n="proc_title">How Alfred came to life.</h2>
+    <p class="section-sub reveal" data-i18n="proc_sub">Every line of code, every design decision, every architectural choice — built solo.</p>
+    <div class="timeline">
+      <div class="tl-item reveal"><div class="tl-dot">💡</div><div class="tl-content"><div class="tl-date" data-i18n="ph1_date">Phase 1 — Concept</div><h4 class="tl-title" data-i18n="ph1_title">Architecture &amp; Data Modelling</h4><p class="tl-desc" data-i18n="ph1_desc">Designed the full data model from scratch — tasks, events, habits, quests, finance, study, cloud-sync store. Chose SwiftUI + Supabase: real-time capable, offline-first by design.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot">🏗️</div><div class="tl-content"><div class="tl-date" data-i18n="ph2_date">Phase 2 — Core</div><h4 class="tl-title" data-i18n="ph2_title">Task Engine &amp; Calendar</h4><p class="tl-desc" data-i18n="ph2_desc">Built task management with due dates, do-dates, reminders, and recurring events. Built the calendar view from scratch: month grid, day detail panel, event forms, and external CalDAV sync.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot">🤖</div><div class="tl-content"><div class="tl-date" data-i18n="ph3_date">Phase 3 — AI</div><h4 class="tl-title" data-i18n="ph3_title">Alfred AI Assistant</h4><p class="tl-desc" data-i18n="ph3_desc">Integrated the Anthropic Claude API with a custom tool system of 20+ tools: add_task, add_event, log_expense, manage habits, and more. Built streaming chat with interactive questionnaire forms, option chips, and AI-generated project planning.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot">🎮</div><div class="tl-content"><div class="tl-date" data-i18n="ph4_date">Phase 4 — Gamification</div><h4 class="tl-title" data-i18n="ph4_title">RPG System &amp; Quests</h4><p class="tl-desc" data-i18n="ph4_desc">Designed and built a complete RPG progression system: XP levelling, daily/weekly/achievement quests, habit streaks, an in-app shop with equippable items, and a social leaderboard.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot">💳</div><div class="tl-content"><div class="tl-date" data-i18n="ph5_date">Phase 5 — Monetisation</div><h4 class="tl-title" data-i18n="ph5_title">StoreKit 2 Subscriptions</h4><p class="tl-desc" data-i18n="ph5_desc">Full tiered subscription system using StoreKit 2: Free (lifetime limits), Pro (monthly AI quotas with auto-reset), and Unlimited (no caps). Paywall UI, purchase flows, restore, and entitlement verification.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot">🗺️</div><div class="tl-content"><div class="tl-date" data-i18n="ph6_date">Phase 6 — Location</div><h4 class="tl-title" data-i18n="ph6_title">Travel Time &amp; Smart Reminders</h4><p class="tl-desc" data-i18n="ph6_desc">Automatic geocoding via MKLocalSearch when tasks are added. Alfred computes travel time (car, transit, scooter) and proactively warns users when to leave — integrating location intelligence into AI planning.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot">✨</div><div class="tl-content"><div class="tl-date" data-i18n="ph7_date">Phase 7 — Ongoing</div><h4 class="tl-title" data-i18n="ph7_title">Self-Improving AI</h4><p class="tl-desc" data-i18n="ph7_desc">Built a self-improvement error logging system: when Alfred makes a mistake, the user can report it, Alfred logs it with type/correction/context, learns from the pattern across sessions, and displays its accuracy score in-app.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label" data-i18n="contact_label">Contact</p>
+    <h2 class="section-title" data-i18n="contact_title">Let's build something.</h2>
+    <p class="section-sub" data-i18n="contact_sub">Open to freelance projects, collaborations, and opportunities. Reach out — I'd love to chat.</p>
+    <div class="contact-links">
+      <a href="mailto:nathanielcoop3.14159@gmail.com" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <span data-i18n="email_btn">Email me</span>
+      </a>
+      <a href="https://github.com/nat1web" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://nat1web.github.io/IanFitness/" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/><path d="m21 3-9 9"/><path d="M15 3h6v6"/></svg>
+        Ian Fitness
+      </a>
+      <a href="https://nat1web.github.io" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="15" height="14" x="1" y="5" rx="2"/></svg>
+        <span data-i18n="video_btn">Video Portfolio</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer><p data-i18n="footer">Designed &amp; built by Nathan · 2025</p></footer>
+
+<script>
+/* ── Translations ─────────────────────────────────────────── */
+const T = {
+  en: {
+    nav_about:'About', nav_projects:'Projects', nav_skills:'Skills',
+    nav_process:'Process', nav_contact:'Contact', nav_cta:'Get in touch',
+    hero_badge:'Open to projects & collabs',
+    hero_name:'Hi, I\'m <em>Nathan</em>.<br>I build apps<br>that think.',
+    hero_tagline:'iOS developer, AI integrator, and web builder. I design and ship intelligent, full-stack products — from core architecture to polished UI to production AI systems.',
+    hero_btn1:'View my work', hero_btn2:'Video Portfolio ↗',
+    stat1:'App on the App Store', stat2:'Websites shipped', stat3:'AI tools integrated', stat4:'Lines of Swift',
+    about_label:'About', about_title:'Developer. Designer.<br>AI builder.',
+    about_p1:'I\'m Nathan — a self-taught developer who builds software that actually improves people\'s lives. My flagship project <strong>Alfred</strong> is a full-stack iOS app I designed, architected, and shipped entirely solo.',
+    about_p2:'I work across the whole product lifecycle: data modelling, cloud sync, real-time AI integration, interactive UI systems, and App Store monetisation. I\'ve also built client websites, including a <strong>fitness coaching portfolio</strong> for a Taipei-based personal trainer.',
+    about_p3:'Outside code, I do <strong>professional video editing</strong> with a focus on motion graphics — that visual sensibility directly shapes how I design interfaces.',
+    fact1_label:'Primary Stack', fact2_label:'AI / Backend', fact3_label:'Speciality',
+    fact3_val:'AI-powered app development', fact4_label:'Web', fact5_label:'Creative Tools',
+    fact6_label:'Currently building', fact6_val:'Alfred Life OS (iOS)',
+    proj_label:'Projects', proj_title:'Things I\'ve built.',
+    proj_sub:'Real products, real complexity — designed and shipped from scratch.',
+    alfred_badge:'Featured iOS App',
+    alfred_sub:'AI-powered Life Operating System',
+    alfred_desc:'A full-stack iOS productivity app built entirely solo — from database schema and cloud sync to a custom AI assistant with 20+ real-time tools. Alfred acts as a personal planning AI: managing tasks, calendar events, finances, habits, study sessions, and more through natural conversation.',
+    f1:'Claude AI with 20+ custom tools and streaming responses',
+    f2:'Smart calendar with travel-time aware scheduling',
+    f3:'Wall-clock Pomodoro timer — works when app is backgrounded',
+    f4:'StoreKit 2 subscriptions — Free, Pro and Unlimited tiers',
+    f5:'Auto-geocoding + MapKit travel time (car, transit, scooter)',
+    f6:'Full RPG system: XP, quests, achievements, shop',
+    f7:'Memory system — Alfred learns user preferences over time',
+    f8:'Interactive AI UI: chips, sliders, questionnaire forms',
+    alfred_appstore:'⬇️ Download on App Store', alfred_process:'See how it was built →',
+    phone_greeting:'Good morning, Nathan ☀️', phone_date:'Wednesday · May 20',
+    phone_today:'Today', task1:'Morning workout', task2:'Submit lab report', task3:'Dentist · City Clinic',
+    tab_tasks:'Tasks', tab_cal:'Calendar', tab_fin:'Finance', tab_profile:'Profile',
+    chat1:'Hey Nathan! You have Dentist at 4:30pm — it\'s 🚗 18 min away. Leave by 4:07pm to be on time.',
+    chip1:'Set reminder', chip2:'Get directions', chip3:'Reschedule',
+    chat2:'Add a gym session tomorrow at 7am',
+    chat3:'Done! 💪 Added <strong style="color:#fff">Gym</strong> on May 21 at 07:00 with a 30-min reminder. How long is the session?',
+    cal_month:'May 2026',
+    d_mon:'M', d_tue:'T', d_wed:'W', d_thu:'T', d_fri:'F', d_sat:'S', d_sun:'S',
+    ev1_title:'Dentist · City Clinic', ev1_time:'16:30 – 17:00 · 🚗 18 min away',
+    ev2_title:'Gym Session', ev2_time:'07:00 – 08:00 tomorrow',
+    unplanned:'Unplanned', utask1:'Finish assignment draft', utask2:'Review lecture notes',
+    ian_title:'Ian Fitness', ian_desc:'Personal branding website for Ian, a Taipei-based private fitness coach. Features his transformation story (110kg → athlete), before/after client results gallery, Instagram video reels, brand partnership pages, and a bilingual contact section. Built to attract and convert new coaching clients.',
+    client_work:'Client work', visit_site:'Visit site →',
+    video_title:'Video Editing Portfolio', video_desc:'Professional video editing and motion graphics showcase — commercial cuts, cinematic sequences, and After Effects motion design work. A separate creative portfolio highlighting visual production and storytelling skills.',
+    port_title:'This Portfolio', port_desc:'Hand-coded from scratch — no frameworks, no templates. Pure HTML, CSS and vanilla JavaScript with custom phone mockups, scroll animations, a CSS timeline, and fully responsive layout. Deployable to GitHub Pages in minutes.',
+    skills_label:'Skills', skills_title:'What I work with.',
+    sk1_name:'iOS Development', sk2_name:'AI Integration', sk3_name:'Backend & Data',
+    sk4_name:'Location & Maps', sk5_name:'Web & Design', sk6_name:'Creative Production',
+    sk2_1:'Tool use & function calling', sk2_2:'System prompt engineering',
+    sk2_3:'Streaming response handling', sk2_4:'Context & memory systems', sk2_5:'Interactive AI UI patterns',
+    sk3_1:'REST API design & consumption', sk3_2:'Offline-first architecture',
+    sk3_3:'JSON serialisation (Swift Codable)', sk3_4:'Cross-device sync',
+    sk4_1:'CoreLocation & geocoding', sk4_2:'MKDirections (travel time)', sk4_3:'Background location updates',
+    sk5_1:'HTML5 & CSS3 (no frameworks)', sk5_2:'JavaScript (vanilla)',
+    sk5_3:'Responsive & mobile-first design', sk5_4:'UI/UX & product design', sk5_5:'GitHub Pages deployment',
+    sk6_1:'Motion graphics', sk6_2:'Colour grading', sk6_3:'Commercial video editing',
+    proc_label:'Development Log', proc_title:'How Alfred came to life.',
+    proc_sub:'Every line of code, every design decision, every architectural choice — built solo.',
+    ph1_date:'Phase 1 — Concept', ph1_title:'Architecture & Data Modelling',
+    ph1_desc:'Designed the full data model from scratch — tasks, events, habits, quests, finance, study, cloud-sync store. Chose SwiftUI + Supabase: real-time capable, offline-first by design.',
+    ph2_date:'Phase 2 — Core', ph2_title:'Task Engine & Calendar',
+    ph2_desc:'Built task management with due dates, do-dates, reminders, and recurring events. Built the calendar view from scratch: month grid, day detail panel, event forms, and external CalDAV sync.',
+    ph3_date:'Phase 3 — AI', ph3_title:'Alfred AI Assistant',
+    ph3_desc:'Integrated the Anthropic Claude API with a custom tool system of 20+ tools: add_task, add_event, log_expense, manage habits, and more. Built streaming chat with interactive questionnaire forms, option chips, and AI-generated project planning.',
+    ph4_date:'Phase 4 — Gamification', ph4_title:'RPG System & Quests',
+    ph4_desc:'Designed and built a complete RPG progression system: XP levelling, daily/weekly/achievement quests, habit streaks, an in-app shop with equippable items, and a social leaderboard.',
+    ph5_date:'Phase 5 — Monetisation', ph5_title:'StoreKit 2 Subscriptions',
+    ph5_desc:'Full tiered subscription system using StoreKit 2: Free (lifetime limits), Pro (monthly AI quotas with auto-reset), and Unlimited (no caps). Paywall UI, purchase flows, restore, and entitlement verification.',
+    ph6_date:'Phase 6 — Location', ph6_title:'Travel Time & Smart Reminders',
+    ph6_desc:'Automatic geocoding via MKLocalSearch when tasks are added. Alfred computes travel time (car, transit, scooter) and proactively warns users when to leave — integrating location intelligence into AI planning.',
+    ph7_date:'Phase 7 — Ongoing', ph7_title:'Self-Improving AI',
+    ph7_desc:'Built a self-improvement error logging system: when Alfred makes a mistake, the user can report it, Alfred logs it with type/correction/context, learns from the pattern across sessions, and displays its accuracy score in-app.',
+    contact_label:'Contact', contact_title:'Let\'s build something.',
+    contact_sub:'Open to freelance projects, collaborations, and opportunities. Reach out — I\'d love to chat.',
+    email_btn:'Email me', video_btn:'Video Portfolio',
+    footer:'Designed & built by Nathan · 2025',
+  },
+
+  zh: {
+    nav_about:'關於我', nav_projects:'作品集', nav_skills:'技能',
+    nav_process:'開發歷程', nav_contact:'聯絡', nav_cta:'聯絡我',
+    hero_badge:'開放接案與合作',
+    hero_name:'嗨，我是 <em>Nathan</em>。<br>我打造會思考的 App。',
+    hero_tagline:'iOS 開發者、AI 整合工程師、網頁建構師。我設計並發布智慧型全端產品——從核心架構到精緻 UI，再到生產級 AI 系統。',
+    hero_btn1:'查看作品', hero_btn2:'影片作品集 ↗',
+    stat1:'App 已上架 App Store', stat2:'個網站已上線', stat3:'個 AI 工具整合', stat4:'行 Swift 程式碼',
+    about_label:'關於我', about_title:'開發者。設計師。<br>AI 建構者。',
+    about_p1:'我是 Nathan——一位自學成才的開發者，專注於打造真正改善人們生活的軟體。我的旗艦作品 <strong>Alfred</strong> 是一款我獨立設計、架構並上架的全端 iOS 應用程式。',
+    about_p2:'我橫跨整個產品生命週期：資料建模、雲端同步、即時 AI 整合、互動 UI 系統，以及 App Store 商業化。我也替客戶建置網站，包括為一位台北私人健身教練打造的<strong>個人品牌網站</strong>。',
+    about_p3:'除了寫程式，我也從事<strong>專業影片剪輯</strong>，專注於動態圖形設計——這份視覺敏感度也直接影響我設計介面的方式。',
+    fact1_label:'主要技術棧', fact2_label:'AI / 後端', fact3_label:'專長',
+    fact3_val:'AI 驅動的應用程式開發', fact4_label:'網頁', fact5_label:'創意工具',
+    fact6_label:'目前正在開發', fact6_val:'Alfred Life OS（iOS）',
+    proj_label:'作品集', proj_title:'我做過的東西。',
+    proj_sub:'真實產品，真實複雜度——從零設計到上架。',
+    alfred_badge:'精選 iOS App',
+    alfred_sub:'AI 驅動的生活作業系統',
+    alfred_desc:'一款完全由我獨立開發的全端 iOS 生產力應用程式——從資料庫設計、雲端同步，到擁有 20 多個即時工具的自訂 AI 助手。Alfred 是你的私人規劃 AI，透過自然對話管理待辦事項、行事曆、財務、習慣、學習等。',
+    f1:'Claude AI 整合 20+ 自訂工具與串流回應',
+    f2:'智慧行事曆，具備通勤時間感知排程',
+    f3:'實體時鐘番茄鐘計時器——App 進背景仍持續運作',
+    f4:'StoreKit 2 訂閱系統——免費、Pro 及無限方案',
+    f5:'自動地理編碼 + MapKit 通勤時間（開車、大眾運輸、機車）',
+    f6:'完整 RPG 系統：經驗值、任務、成就、商店',
+    f7:'記憶系統——Alfred 隨時間學習你的偏好',
+    f8:'互動式 AI 介面：選項晶片、滑桿、問卷表單',
+    alfred_appstore:'⬇️ 在 App Store 下載', alfred_process:'查看開發歷程 →',
+    phone_greeting:'早安，Nathan ☀️', phone_date:'星期三 · 5月20日',
+    phone_today:'今天', task1:'晨間健身', task2:'繳交實驗報告', task3:'牙醫 · 城市診所',
+    tab_tasks:'任務', tab_cal:'行事曆', tab_fin:'財務', tab_profile:'個人',
+    chat1:'嗨 Nathan！你下午 4:30 有牙醫預約——距離約 🚗 18 分鐘車程。建議 4:07 出發才不會遲到。',
+    chip1:'設定提醒', chip2:'開始導航', chip3:'重新安排',
+    chat2:'明天早上 7 點幫我加一個健身房',
+    chat3:'好的！💪 已新增 <strong style="color:#fff">健身房</strong> 到 5/21 07:00，並設定 30 分鐘前提醒。這次預計練多久？',
+    cal_month:'2026 年 5 月',
+    d_mon:'一', d_tue:'二', d_wed:'三', d_thu:'四', d_fri:'五', d_sat:'六', d_sun:'日',
+    ev1_title:'牙醫 · 城市診所', ev1_time:'16:30 – 17:00 · 🚗 18 分鐘車程',
+    ev2_title:'健身房', ev2_time:'07:00 – 08:00 明天',
+    unplanned:'未排程', utask1:'完成作業草稿', utask2:'複習課堂筆記',
+    ian_title:'Ian 健身官網', ian_desc:'為台北私人健身教練 Ian 打造的個人品牌網站。包含他的蛻變故事（110公斤→健美選手）、學員前後對比成果、Instagram Reels 影片、品牌合作頁面，以及中英雙語聯絡區塊。專為吸引並轉化新客戶而設計。',
+    client_work:'客戶案件', visit_site:'前往網站 →',
+    video_title:'影片剪輯作品集', video_desc:'專業影片剪輯與動態圖形展示——商業剪輯、電影感鏡頭序列，以及 After Effects 動態設計作品。一個獨立的創意作品集，展現視覺製作與說故事的能力。',
+    port_title:'本作品集', port_desc:'完全手工編碼——無框架、無模板。純 HTML、CSS 和原生 JavaScript，包含自訂手機模型、滾動動畫、CSS 時間軸，以及全響應式佈局。數分鐘內即可部署至 GitHub Pages。',
+    skills_label:'技能', skills_title:'我使用的工具。',
+    sk1_name:'iOS 開發', sk2_name:'AI 整合', sk3_name:'後端與資料',
+    sk4_name:'定位與地圖', sk5_name:'網頁與設計', sk6_name:'影像創作',
+    sk2_1:'工具呼叫與函式調用', sk2_2:'系統提示詞工程',
+    sk2_3:'串流回應處理', sk2_4:'上下文與記憶系統', sk2_5:'互動式 AI UI 設計模式',
+    sk3_1:'REST API 設計與串接', sk3_2:'離線優先架構',
+    sk3_3:'JSON 序列化（Swift Codable）', sk3_4:'跨裝置同步',
+    sk4_1:'CoreLocation 與地理編碼', sk4_2:'MKDirections（通勤時間）', sk4_3:'背景定位更新',
+    sk5_1:'HTML5 與 CSS3（無框架）', sk5_2:'JavaScript（原生）',
+    sk5_3:'響應式與行動優先設計', sk5_4:'UI/UX 與產品設計', sk5_5:'GitHub Pages 部署',
+    sk6_1:'動態圖形設計', sk6_2:'調色', sk6_3:'商業影片剪輯',
+    proc_label:'開發紀錄', proc_title:'Alfred 是怎麼誕生的。',
+    proc_sub:'每一行程式碼、每一個設計決策、每一個架構選擇——全部獨立完成。',
+    ph1_date:'第一階段——概念', ph1_title:'架構設計與資料建模',
+    ph1_desc:'從零開始設計完整資料模型——任務、行事曆、習慣、任務系統、財務、學習、雲端同步資料庫。選用 SwiftUI + Supabase：即時能力強，以離線優先為設計原則。',
+    ph2_date:'第二階段——核心功能', ph2_title:'任務引擎與行事曆',
+    ph2_desc:'建構含截止日期、執行日期、提醒與重複事件的任務管理系統。從零打造行事曆視圖：月份格子、日期詳情面板、事件表單，以及外部 CalDAV 同步。',
+    ph3_date:'第三階段——AI', ph3_title:'Alfred AI 助手',
+    ph3_desc:'整合 Anthropic Claude API，建立含 20+ 工具的自訂工具系統：新增任務、新增事件、記錄支出、管理習慣等。開發串流對話介面，支援互動問卷表單、選項晶片，以及 AI 生成的專案規劃。',
+    ph4_date:'第四階段——遊戲化', ph4_title:'RPG 系統與任務',
+    ph4_desc:'設計並實作完整的 RPG 升級系統：經驗值升等、每日/每週/成就任務、習慣連續天數、可裝備物品的遊戲內商店，以及社交排行榜。',
+    ph5_date:'第五階段——商業化', ph5_title:'StoreKit 2 訂閱系統',
+    ph5_desc:'使用 StoreKit 2 實作完整分層訂閱系統：免費（終身限制）、Pro（每月 AI 配額自動重置）、無限（無上限）。含付費牆 UI、購買流程、恢復購買及資格驗證。',
+    ph6_date:'第六階段——定位', ph6_title:'通勤時間與智慧提醒',
+    ph6_desc:'新增任務時透過 MKLocalSearch 自動地理編碼。Alfred 計算通勤時間（開車、大眾運輸、機車）並主動提醒用戶何時出發——將定位智慧整合進 AI 規劃流程。',
+    ph7_date:'第七階段——持續進行中', ph7_title:'自我進化的 AI',
+    ph7_desc:'建置自我改善的錯誤記錄系統：當 Alfred 犯錯時，用戶可回報，Alfred 將錯誤連同類型、修正內容與情境記錄下來，跨對話學習模式，並在個人頁顯示準確率分數。',
+    contact_label:'聯絡', contact_title:'一起做些什麼吧。',
+    contact_sub:'歡迎接案、合作洽談與各種機會。有想法就聯絡我——我很樂意聊聊。',
+    email_btn:'寄信給我', video_btn:'影片作品集',
+    footer:'由 Nathan 設計開發 · 2025',
+  }
+};
+
+/* ── Language engine ─────────────────────────────────────── */
+let currentLang = localStorage.getItem('lang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+
+  // Update button states
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === (lang === 'en' ? 'EN' : '中文'));
+  });
+
+  // Swap text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+  });
+
+  // Swap innerHTML (for elements with <em>, <strong>, <br> etc.)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+
+  // Update html lang attribute
+  document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'en';
+}
+
+// Apply saved language on load
+setLang(currentLang);
+
+/* ── Scroll reveal ───────────────────────────────────────── */
+const obs = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.08, rootMargin: '0px 0px -32px 0px' }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
